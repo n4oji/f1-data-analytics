@@ -1,0 +1,31 @@
+team_colors = {
+    # Equipes atuais
+    "Ferrari": "#DC0000",
+    "McLaren": "#FF8700",
+    "Mercedes": "#00D2BE",
+    "Red Bull": "#0600EF",
+    "Williams": "#00A3E0",
+    "Aston Martin": "#006F62",
+    "Alpine F1 Team": "#0090FF",
+    "Haas F1 Team": "#B6BABD",
+    "AlphaTauri": "#2B4562",
+    "Sauber": "#00E701",
+
+    # Variações históricas / antigas
+    "Renault": "#FFF500",
+    "Benetton": "#00A650",
+    "Lotus": "#006400",
+    "Tyrrell": "#00293F",
+    "Brabham": "#0051A3",
+    "BRM": "#006F62",
+    "Brawn": "#F0D787",
+    "Jordan": "#FFEE00",
+    "Jaguar": "#006F62",
+    "Minardi": "#F3E500",
+    "Toro Rosso": "#469BFF",
+    "Force India": "#F596C8",
+    "Caterham": "#009A44",
+    "Manor": "#EF3E42",
+    "Super Aguri": "#E10600",
+    "Alfa Romeo": "#900000",
+}
