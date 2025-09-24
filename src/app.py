@@ -83,17 +83,38 @@ circuits = load_circuits()
 driver_names = get_driver_names(pilots_df)
 
 # ======================
-# Filtros
+# Filtros Globais na Sidebar
 # ======================
 st.sidebar.header("🔍 Filtros")
+
+# Filtro de Ano
 years = sorted(df["year"].unique())
 selected_year = st.sidebar.selectbox("Selecione o ano", ["Todos"] + years)
+
+# Filtro de Piloto
+winners_all = df[df["position"] == "1"]
+winners_driver_ids = winners_all["driverId"].unique()
+driver_names_winners = driver_names[driver_names.index.isin(winners_driver_ids)]
+selected_pilot = st.sidebar.selectbox(
+    "Selecione um piloto", 
+    ["Todos"] + sorted(driver_names_winners.values)
+)
+
+# Filtro de Circuito
+circuitos_disponiveis = sorted(races["name"].unique())
+selected_circuit = st.sidebar.selectbox(
+    "Selecione um circuito", 
+    ["Todos"] + circuitos_disponiveis
+)
+
+# Adicionar nota informativa
+st.sidebar.info("💡 Todos os filtros estão centralizados aqui na barra lateral e afetam todas as abas relevantes.")
 
 # Criar cópias separadas
 df_completo = df.copy()      # mantém todos os anos
 df_filtrado = df.copy()
 
-# Filtrar por ano apenas no df_filtrado
+# Aplicar filtros
 if selected_year != "Todos":
     df_filtrado = df_filtrado[df_filtrado["year"] == selected_year]
 
@@ -157,17 +178,8 @@ with tab_pilotos:
 with tab_pilotos:
     st.subheader("🏎️ Detalhe por Piloto")
 
-    # Lista de pilotos com pelo menos 1 vitória (em toda a história)
-    winners_all = df_completo[df_completo["position"] == "1"]
-    winners_driver_ids = winners_all["driverId"].unique()
-    driver_names_winners = driver_names[driver_names.index.isin(winners_driver_ids)]
-
-    piloto_escolhido = st.selectbox(
-        "Selecione um piloto", sorted(driver_names_winners.values)
-    )
-
-    if piloto_escolhido:
-        driver_id = driver_names[driver_names == piloto_escolhido].index[0]
+    if selected_pilot != "Todos":
+        driver_id = driver_names[driver_names == selected_pilot].index[0]
 
         # usa df_completo para evolução (não afetado pelo filtro de ano)
         winners_completo = df_completo[df_completo["position"] == "1"]
@@ -185,9 +197,11 @@ with tab_pilotos:
             x="Ano",
             y="Vitórias",
             markers=True,
-            title=f"Evolução de vitórias de {piloto_escolhido}",
+            title=f"Evolução de vitórias de {selected_pilot}",
         )
         st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.info("👈 Selecione um piloto na barra lateral para ver sua evolução de vitórias ao longo dos anos.")
 
 
 
@@ -267,15 +281,14 @@ with tab_equipes:
     fig.update_layout(xaxis_tickangle=-45)
     st.plotly_chart(fig, use_container_width=True)
     
- ## ======================
+## ======================
 # Circuitos - Recordes e Estatísticas
 # ======================
 with tab_circuitos:
     st.subheader("🏟️ Estatísticas dos Circuitos")
 
-    # Filtros
-    circuitos_disponiveis = sorted(races["name"].unique())
-    circuito_escolhido = st.selectbox("Selecione um circuito", ["Todos"] + circuitos_disponiveis)
+    # Usar o filtro de circuito da sidebar
+    circuito_escolhido = selected_circuit
 
     # Filtro principal para races pelo ano
     if selected_year != "Todos":
